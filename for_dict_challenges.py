@@ -1,12 +1,13 @@
 # Задание 1
 # Дан список учеников, нужно посчитать количество повторений каждого имени ученика.
+import collections
+
+
 def name_count(students):
-    name_dict = {}
+    name_dict = collections.Counter()
     for name in students:
-        if not name['first_name'] in name_dict:
-            name_dict[name['first_name']] = 1
-        else:
-            name_dict[name['first_name']] += 1
+      name_dict[name['first_name']] += 1
+
     return name_dict
 
 
@@ -19,19 +20,28 @@ def count_name_dict(name_dict):
             name_count[value] = key 
     return name_count 
 
+def max_name(students):
+  max_name =  students[0]
+  name_count_max = students.count(max_name)
+  for name in students[1:]:
+      name_count = students.count(name)
+      if name_count > name_count_max:
+        max_name = name
+        name_count_max = name_count
+  return max_name['first_name']
+
+
+
+
+
 def count_boys_and_girls(name_class):
     girls, boys = [0, 0]
-    for k,v in name_class.items():
-        if k == 'students':
-            for name in v:
-             for key, value in name.items():
-                if is_male.get(value):
-                    boys+=1    
-                else:
-                    girls+=1 
-        else:
-            class_name = v 
-    return  class_name, boys, girls
+    for name in name_class['students']:
+      if is_male.get(name['first_name']):
+          boys += 1    
+      else:
+          girls += 1 
+    return  name_class['class'], boys, girls
     
 
 students = [
@@ -61,9 +71,8 @@ students = [
   {'first_name': 'Маша'},
   {'first_name': 'Оля'},
 ]
-name_dict = name_count(students)
-dict_name_count = count_name_dict(name_dict)
-print(f'Самое частое имя среди учеников: {dict_name_count[max(dict_name_count)]}')  
+
+print(f'Самое частое имя среди учеников: {max_name(students)}')  
 
 
 
@@ -84,11 +93,8 @@ school_students = [
   ]
 ]
 i = 0
-for school_class in school_students:
-    i +=1
-    name_dict = name_count(school_class)
-    dict_name_count = count_name_dict(name_dict)
-    print(f'Самое частое имя в классе {i}: {dict_name_count[max(dict_name_count)]}')  
+for i, school_class in enumerate(school_students):
+    print(f'Самое частое имя в классе {i + 1}: {max_name(school_class)}')  
 
 
 # Пример вывода:
@@ -130,12 +136,16 @@ is_male = {
   'Олег': True,
   'Миша': True,
 }
+max_boys , max_girls = [0,0]
 for name_class in school:
     class_name, boys, girls = count_boys_and_girls(name_class)
-    if boys > girls:
-        print(f'Больше всего мальчиков в классе {class_name}')
-    else:
-        print(f'Больше всего девочек в классе {class_name}')
+    if boys > max_boys:
+      class_boys = class_name 
+    elif girls > max_girls:
+      class_girls = class_name
+
+print(f'Больше всего мальчиков в классе {class_boys}')
+print(f'Больше всего девочек в классе {class_girls}')
 
 
 # Пример вывода:
